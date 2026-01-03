@@ -5,8 +5,10 @@ import { UserRole } from "../../types/type";
 
 const router = express.Router();
 
-router.post("/", auth(UserRole.USER), postController.createPost);
-
 router.get("/", postController.readPost);
+
+router.get("/:id", postController.singlePost);
+
+router.post("/", auth(UserRole.USER), postController.createPost);
 
 export const postRouter = router;

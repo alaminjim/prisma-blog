@@ -19,7 +19,15 @@ const readPost = async () => {
   return result;
 };
 
+const singlePost = async (id: string) => {
+  const result = prisma.post.findUnique({
+    where: { id },
+  });
+  return result;
+};
+
 export const postService = {
   createPost,
   readPost,
+  singlePost,
 };

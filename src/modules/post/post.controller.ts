@@ -33,7 +33,21 @@ const readPost = async (req: Request, res: Response) => {
   }
 };
 
+const singlePost = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const result = await postService.singlePost(id as string);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "post read failed",
+      details: error,
+    });
+  }
+};
+
 export const postController = {
   createPost,
   readPost,
+  singlePost,
 };
