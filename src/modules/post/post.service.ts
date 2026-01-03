@@ -1,4 +1,4 @@
-import { Post } from "../../../generated/prisma/client";
+import { Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
@@ -18,6 +18,8 @@ const createPost = async (
 const readPost = async (payload: {
   search: string | undefined;
   tags: string[];
+  isFeatured: boolean | undefined;
+  status: PostStatus | undefined;
 }) => {
   const addCondition: PostWhereInput[] = [];
 
@@ -44,6 +46,22 @@ const readPost = async (payload: {
       tags: {
         hasEvery: payload.tags as string[],
       },
+    });
+  }
+
+  if (typeof payload.isFeatured === "boolean") {
+    addCondition.push({
+      isFeatured: payload.isFeatured,
+    });
+  }
+
+  if (
+    payload.status === "PUBLISHED" ||
+    payload.status === "ARCHIVED" ||
+    payload.status === "DRAFT"
+  ) {
+    addCondition.push({
+      status: payload.status,
     });
   }
 
