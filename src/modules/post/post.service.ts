@@ -99,20 +99,22 @@ const readPost = async (payload: {
 };
 
 const singlePost = async (id: string) => {
-  const viewCount = await prisma.post.update({
-    where: {
-      id: id,
-    },
-    data: {
-      views: {
-        increment: 1,
+  return await prisma.$transaction(async (tx) => {
+    await prisma.post.update({
+      where: {
+        id: id,
       },
-    },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    const result = prisma.post.findUnique({
+      where: { id },
+    });
+    return result;
   });
-  const result = prisma.post.findUnique({
-    where: { id },
-  });
-  return result;
 };
 
 export const postService = {
