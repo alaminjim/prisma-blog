@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { postService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
+import sortAndPagination from "../../helpers/sortandpagination";
 
 const createPost = async (req: Request, res: Response) => {
   try {
@@ -40,9 +41,9 @@ const readPost = async (req: Request, res: Response) => {
 
     const status = req.query.status as PostStatus | undefined;
 
-    const page = Number(req.query.page ?? 1);
-    const limit = Number(req.query.limit ?? 5);
-    const skip = (page - 1) * limit;
+    const { page, limit, skip, sortBy, sortOrder } = sortAndPagination(
+      req.query
+    );
 
     const result = await postService.readPost({
       search: searchString,
@@ -52,6 +53,8 @@ const readPost = async (req: Request, res: Response) => {
       page,
       limit,
       skip,
+      sortBy,
+      sortOrder,
     });
     res.status(200).json(result);
   } catch (error) {

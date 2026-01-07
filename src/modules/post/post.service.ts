@@ -24,6 +24,8 @@ const readPost = async (payload: {
   page: number;
   limit: number;
   skip: number;
+  sortBy: string;
+  sortOrder: string;
 }) => {
   const addCondition: PostWhereInput[] = [];
 
@@ -75,8 +77,25 @@ const readPost = async (payload: {
     where: {
       AND: addCondition,
     },
+    orderBy: {
+      [payload.sortBy]: payload.sortOrder,
+    },
   });
-  return result;
+
+  const total = await prisma.post.count({
+    where: {
+      AND: addCondition,
+    },
+  });
+  return {
+    data: result,
+    pagination: {
+      total,
+      page: payload.page,
+      limit: payload.limit,
+      totalPage: Math.ceil(total / payload.limit),
+    },
+  };
 };
 
 const singlePost = async (id: string) => {
