@@ -99,6 +99,16 @@ const readPost = async (payload: {
 };
 
 const singlePost = async (id: string) => {
+  const viewCount = await prisma.post.update({
+    where: {
+      id: id,
+    },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
+  });
   const result = prisma.post.findUnique({
     where: { id },
   });
