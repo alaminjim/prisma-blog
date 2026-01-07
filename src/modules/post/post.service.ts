@@ -1,3 +1,4 @@
+import { Payload } from "./../../../generated/prisma/internal/prismaNamespace";
 import { Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
@@ -20,6 +21,9 @@ const readPost = async (payload: {
   tags: string[];
   isFeatured: boolean | undefined;
   status: PostStatus | undefined;
+  page: number;
+  limit: number;
+  skip: number;
 }) => {
   const addCondition: PostWhereInput[] = [];
 
@@ -66,6 +70,8 @@ const readPost = async (payload: {
   }
 
   const result = await prisma.post.findMany({
+    take: payload.limit,
+    skip: payload.skip,
     where: {
       AND: addCondition,
     },
