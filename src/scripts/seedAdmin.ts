@@ -4,11 +4,15 @@ import { UserRole } from "../types/type";
 async function seedingAdmin() {
   try {
     const storeDataAmin = {
-      name: "jim",
-      email: "admin123@gmail.com",
-      password: "admin12345",
+      name: process.env.ADMIN_NAME,
+      email: process.env.ADMIN_EMAIL,
+      password: process.env.ADMIN_PASS,
       role: UserRole.ADMIN,
     };
+
+    if (!storeDataAmin.email) {
+      throw new Error("ADMIN_EMAIL environment variable is not set");
+    }
 
     const exits = await prisma.user.findUnique({
       where: {
