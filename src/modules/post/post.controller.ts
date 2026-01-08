@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { postService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
 import sortAndPagination from "../../helpers/sortandpagination";
+import filtering from "../../helpers/filtering";
 
 const createPost = async (req: Request, res: Response) => {
   try {
@@ -25,28 +26,19 @@ const createPost = async (req: Request, res: Response) => {
 
 const readPost = async (req: Request, res: Response) => {
   try {
-    const { search } = req.query;
-
-    const searchString = typeof search === "string" ? search : undefined;
-
-    const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
-
-    const isFeatured = req.query.isFeatured
-      ? req.query.isFeatured === "true"
-        ? true
-        : req.query.isFeatured === "false"
-        ? false
-        : undefined
-      : undefined;
-
-    const status = req.query.status as PostStatus | undefined;
+    const {
+      search: postSearch,
+      tags,
+      isFeatured,
+      status,
+    } = filtering(req.query as any);
 
     const { page, limit, skip, sortBy, sortOrder } = sortAndPagination(
       req.query
     );
 
     const result = await postService.readPost({
-      search: searchString,
+      search: postSearch,
       tags,
       isFeatured,
       status,
