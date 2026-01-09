@@ -5,22 +5,20 @@ import { UserRole } from "../../types/type";
 
 const router = express.Router();
 
-router.get(
-  "/author/:authorId",
-  auth(UserRole.USER, UserRole.ADMIN),
-  commentController.getIdByAuthor
-);
+router.get("/author/:authorId", commentController.getIdByAuthor);
 
-router.get(
-  "/:id",
-  auth(UserRole.USER, UserRole.ADMIN),
-  commentController.getIdByComment
-);
+router.get("/:id", commentController.getIdByComment);
 
 router.post(
   "/",
   auth(UserRole.USER, UserRole.ADMIN),
   commentController.createComment
+);
+
+router.delete(
+  "/:deleteId",
+  auth(UserRole.USER, UserRole.ADMIN),
+  commentController.deleteComment
 );
 
 export const commentRouter = router;
