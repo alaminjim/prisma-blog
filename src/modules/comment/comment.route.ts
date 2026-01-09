@@ -21,4 +21,6 @@ router.delete(
   commentController.deleteComment
 );
 
+router.patch("/:updateId", commentController.updateComment);
+
 export const commentRouter = router;
