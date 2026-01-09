@@ -83,6 +83,11 @@ const readPost = async (payload: {
     orderBy: {
       [payload.sortBy]: payload.sortOrder,
     },
+    include: {
+      _count: {
+        select: { comment: true },
+      },
+    },
   });
 
   const total = await prisma.post.count({
@@ -119,21 +124,24 @@ const singlePost = async (id: string) => {
         comment: {
           where: {
             parentId: null,
-            status: CommentStatus.REJECT,
+          },
+          orderBy: {
+            createdAt: "desc",
           },
           include: {
             reply: {
-              where: {
-                status: CommentStatus.REJECT,
-              },
               include: {
-                reply: {
-                  where: {
-                    status: CommentStatus.REJECT,
-                  },
-                },
+                reply: true,
+              },
+              orderBy: {
+                createdAt: "asc",
               },
             },
+          },
+        },
+        _count: {
+          select: {
+            comment: true,
           },
         },
       },
