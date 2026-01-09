@@ -1,5 +1,8 @@
-import { Payload } from "./../../../generated/prisma/internal/prismaNamespace";
-import { Post, PostStatus } from "../../../generated/prisma/client";
+import {
+  CommentStatus,
+  Post,
+  PostStatus,
+} from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
@@ -100,7 +103,7 @@ const readPost = async (payload: {
 
 const singlePost = async (id: string) => {
   return await prisma.$transaction(async (tx) => {
-    await prisma.post.update({
+    await tx.post.update({
       where: {
         id: id,
       },
@@ -110,8 +113,30 @@ const singlePost = async (id: string) => {
         },
       },
     });
-    const result = prisma.post.findUnique({
+    const result = tx.post.findUnique({
       where: { id },
+      include: {
+        comment: {
+          where: {
+            parentId: null,
+            status: CommentStatus.REJECT,
+          },
+          include: {
+            reply: {
+              where: {
+                status: CommentStatus.REJECT,
+              },
+              include: {
+                reply: {
+                  where: {
+                    status: CommentStatus.REJECT,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
     return result;
   });

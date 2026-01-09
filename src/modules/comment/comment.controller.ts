@@ -7,7 +7,7 @@ const createComment = async (req: Request, res: Response) => {
     req.body.authorId = user?.id;
 
     const result = await commentService.createComment(req.body);
-    console.log(req.body);
+
     res.status(201).json(result);
   } catch (error: any) {
     res.status(400).json({
