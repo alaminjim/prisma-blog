@@ -1,6 +1,6 @@
 import { PostStatus } from "../../generated/prisma/enums";
 
-type IFiltering = {
+type IFilteringData = {
   search: string | undefined;
   tags: string[] | [] | string;
   isFeatured: boolean | undefined | string;
@@ -14,7 +14,7 @@ type FilteringReturn = {
   status: PostStatus | undefined;
 };
 
-const filtering = (options: IFiltering): FilteringReturn => {
+const filtering = (options: IFilteringData): FilteringReturn => {
   const search: string | undefined = options.search;
   const postSearch = typeof search === "string" ? search : undefined;
 
