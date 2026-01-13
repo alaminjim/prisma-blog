@@ -118,7 +118,7 @@ const singlePost = async (id: string) => {
         },
       },
     });
-    return await tx.post.findUnique({
+    const result = tx.post.findUnique({
       where: { id },
       include: {
         comment: {
@@ -146,6 +146,7 @@ const singlePost = async (id: string) => {
         },
       },
     });
+    return result;
   });
 };
 
