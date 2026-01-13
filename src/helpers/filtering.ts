@@ -7,14 +7,7 @@ type IFilteringData = {
   status: PostStatus | undefined;
 };
 
-type FilteringReturn = {
-  search: string | undefined;
-  tags: string[] | [];
-  isFeatured: boolean | undefined;
-  status: PostStatus | undefined;
-};
-
-const filtering = (options: IFilteringData): FilteringReturn => {
+const filtering = (options: IFilteringData) => {
   const search: string | undefined = options.search;
   const postSearch = typeof search === "string" ? search : undefined;
 
