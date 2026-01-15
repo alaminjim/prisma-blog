@@ -150,8 +150,18 @@ const singlePost = async (id: string) => {
   });
 };
 
+const getMyPost = async (authorId: string) => {
+  const result = await prisma.post.findMany({
+    where: {
+      authorId,
+    },
+  });
+  return result;
+};
+
 export const postService = {
   createPost,
   readPost,
   singlePost,
+  getMyPost,
 };

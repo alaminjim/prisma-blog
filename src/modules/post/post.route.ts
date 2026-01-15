@@ -5,10 +5,20 @@ import { UserRole } from "../../types/type";
 
 const router = express.Router();
 
+router.get(
+  "/my-posts",
+  auth(UserRole.ADMIN, UserRole.USER),
+  postController.getMyPost
+);
+
 router.get("/", postController.readPost);
 
 router.get("/:id", postController.singlePost);
 
-router.post("/", auth(UserRole.USER), postController.createPost);
+router.post(
+  "/",
+  auth(UserRole.USER, UserRole.ADMIN),
+  postController.createPost
+);
 
 export const postRouter = router;
