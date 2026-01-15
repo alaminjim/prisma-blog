@@ -155,6 +155,9 @@ const getMyPost = async (authorId: string) => {
     where: {
       authorId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return result;
 };
