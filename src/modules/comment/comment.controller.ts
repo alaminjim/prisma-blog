@@ -88,8 +88,9 @@ const moderateComment = async (req: Request, res: Response) => {
     );
     res.status(200).json({ data: result, message: "update Successful" });
   } catch (error: any) {
+    const errorMessage = error ? error.message : "comment update failed";
     res.status(400).json({
-      error: "comment update failed",
+      error: errorMessage,
       details: error,
     });
   }
