@@ -74,7 +74,7 @@ const getMyPost = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const result = await postService.getMyPost(user?.id as string);
-    res.status(200).json(result);
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({
       error: "post read failed",
