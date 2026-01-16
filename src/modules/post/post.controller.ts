@@ -3,6 +3,7 @@ import { postService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
 import sortAndPagination from "../../helpers/sortandpagination";
 import filtering from "../../helpers/filtering";
+import { UserRole } from "../../types/type";
 
 const createPost = async (req: Request, res: Response) => {
   try {
@@ -87,10 +88,12 @@ const updateOwnPost = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const { postId } = req.params;
+    const isAdmin = user?.role === UserRole.ADMIN;
     const result = await postService.updateOwnPost(
       postId as string,
       req.body,
-      user?.id as string
+      user?.id as string,
+      isAdmin
     );
     res.status(200).json({ success: true, data: result });
   } catch (error) {
