@@ -123,6 +123,18 @@ const deleteOwnPost = async (req: Request, res: Response) => {
   }
 };
 
+const postStats = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.postStats();
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({
+      error: "post stats failed",
+      details: error,
+    });
+  }
+};
+
 export const postController = {
   createPost,
   readPost,
@@ -130,4 +142,5 @@ export const postController = {
   getMyPost,
   updateOwnPost,
   deleteOwnPost,
+  postStats,
 };
