@@ -83,9 +83,28 @@ const getMyPost = async (req: Request, res: Response) => {
   }
 };
 
+const updateOwnPost = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { postId } = req.params;
+    const result = await postService.updateOwnPost(
+      postId as string,
+      req.body,
+      user?.id as string
+    );
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({
+      error: "post read failed",
+      details: error,
+    });
+  }
+};
+
 export const postController = {
   createPost,
   readPost,
   singlePost,
   getMyPost,
+  updateOwnPost,
 };
