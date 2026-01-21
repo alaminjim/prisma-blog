@@ -26,7 +26,11 @@ function errorHandler(
   } else if (err instanceof Prisma.PrismaClientInitializationError) {
     if (err.errorCode === "P1000") {
       statusCode = 400;
-      errorMessage = "Authentication failed";
+      errorMessage = "Authentication failed and right data field";
+    }
+    if (err.errorCode === "P1001") {
+      statusCode = 400;
+      errorMessage = "Database connection failed";
     }
   }
 
