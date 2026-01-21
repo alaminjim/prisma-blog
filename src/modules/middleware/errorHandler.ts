@@ -20,6 +20,14 @@ function errorHandler(
       errorMessage =
         "An operation failed because it depends on one or more records that were required but not found";
     }
+  } else if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+    statusCode = 500;
+    errorMessage = "Engine is not yet connected";
+  } else if (err instanceof Prisma.PrismaClientInitializationError) {
+    if (err.errorCode === "P1000") {
+      statusCode = 400;
+      errorMessage = "Authentication failed";
+    }
   }
 
   res.status(statusCode);
