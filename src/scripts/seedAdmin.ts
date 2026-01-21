@@ -35,7 +35,6 @@ async function seedingAdmin() {
         body: JSON.stringify(storeDataAmin),
       }
     );
-    console.log(createAdminData);
 
     if (createAdminData.ok) {
       await prisma.user.update({
