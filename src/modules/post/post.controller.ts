@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { postService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
 import sortAndPagination from "../../helpers/sortandpagination";
 import filtering from "../../helpers/filtering";
 import { UserRole } from "../../types/type";
 
-const createPost = async (req: Request, res: Response) => {
+const createPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user;
 
@@ -18,10 +18,7 @@ const createPost = async (req: Request, res: Response) => {
     const result = await postService.createPost(req.body, user.id as string);
     res.status(201).json(result);
   } catch (error: any) {
-    res.status(400).json({
-      error: "post creation failed",
-      details: error,
-    });
+    next(error);
   }
 };
 
@@ -35,7 +32,7 @@ const readPost = async (req: Request, res: Response) => {
     } = filtering(req.query as any);
 
     const { page, limit, skip, sortBy, sortOrder } = sortAndPagination(
-      req.query
+      req.query,
     );
 
     const result = await postService.readPost({
@@ -93,7 +90,7 @@ const updateOwnPost = async (req: Request, res: Response) => {
       postId as string,
       req.body,
       user?.id as string,
-      isAdmin
+      isAdmin,
     );
     res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -112,7 +109,7 @@ const deleteOwnPost = async (req: Request, res: Response) => {
     const result = await postService.deleteOwnPost(
       postId as string,
       user?.id as string,
-      isAdmin
+      isAdmin,
     );
     res.status(200).json({ success: true, data: result });
   } catch (error) {
