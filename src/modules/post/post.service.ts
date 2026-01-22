@@ -8,7 +8,7 @@ import { prisma } from "../../lib/prisma";
 
 const createPost = async (
   data: Omit<Post, "id" | "createdAt" | "updatedAt">,
-  userId: string
+  userId: string,
 ) => {
   const result = await prisma.post.create({
     data: {
@@ -195,7 +195,7 @@ const updateOwnPost = async (
   postId: string,
   data: Partial<Post>,
   authorId: string,
-  isAdmin: boolean
+  isAdmin: boolean,
 ) => {
   const postData = await prisma.post.findUniqueOrThrow({
     where: {
@@ -226,7 +226,7 @@ const updateOwnPost = async (
 const deleteOwnPost = async (
   postId: string,
   authorId: string,
-  isAdmin: boolean
+  isAdmin: boolean,
 ) => {
   const postData = await prisma.post.findUniqueOrThrow({
     where: {
@@ -246,81 +246,6 @@ const deleteOwnPost = async (
     where: {
       id: postId,
     },
-  });
-};
-
-const postStats = async () => {
-  return await prisma.$transaction(async (tx) => {
-    const [
-      totalPost,
-      publishedPost,
-      draftsPost,
-      archivedPost,
-      totalComments,
-      approvedComments,
-      rejectComments,
-      totalUser,
-      totalAdmin,
-      userCount,
-      totalViews,
-    ] = await Promise.all([
-      await tx.post.count(),
-      await tx.post.count({
-        where: {
-          status: PostStatus.PUBLISHED,
-        },
-      }),
-      await tx.post.count({
-        where: {
-          status: PostStatus.ARCHIVED,
-        },
-      }),
-      await tx.post.count({
-        where: {
-          status: PostStatus.DRAFT,
-        },
-      }),
-      await tx.comments.count(),
-      await tx.comments.count({
-        where: {
-          status: CommentStatus.APPROVED,
-        },
-      }),
-      await tx.comments.count({
-        where: {
-          status: CommentStatus.REJECT,
-        },
-      }),
-      await tx.user.count(),
-      await tx.user.count({
-        where: {
-          role: "ADMIN",
-        },
-      }),
-      await tx.user.count({
-        where: {
-          role: "USER",
-        },
-      }),
-      await tx.post.aggregate({
-        _sum: {
-          views: true,
-        },
-      }),
-    ]);
-    return {
-      totalPost,
-      publishedPost,
-      draftsPost,
-      archivedPost,
-      totalComments,
-      approvedComments,
-      rejectComments,
-      totalUser,
-      totalAdmin,
-      userCount,
-      totalViews: totalViews._sum.views,
-    };
   });
 };
 
