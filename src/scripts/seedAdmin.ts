@@ -25,7 +25,7 @@ async function seedingAdmin() {
     }
 
     const createAdminData = await fetch(
-      "http://localhost:3000/api/auth/sign-up/email",
+      "http://localhost:5000/api/auth/sign-up/email",
       {
         method: "POST",
         headers: {
@@ -33,7 +33,7 @@ async function seedingAdmin() {
           Origin: "http://localhost:4000",
         },
         body: JSON.stringify(storeDataAmin),
-      }
+      },
     );
 
     if (createAdminData.ok) {
