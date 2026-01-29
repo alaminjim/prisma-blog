@@ -1,3 +1,3 @@
-export default function DashboardLayouts() {
-  return <div>this is a dashboard</div>;
+export default function DashboardPage() {
+  return <div>this is a dashboard page</div>;
 }
