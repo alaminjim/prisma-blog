@@ -83,7 +83,7 @@ const Navbar = ({
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <a href={"/"} className="flex items-center gap-2">
               <img
                 src={logo.src}
                 className="max-h-8 dark:invert"
@@ -151,6 +151,7 @@ const Navbar = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
+                    <ModeToggle />
                     <Button asChild variant="outline">
                       <Link href={auth.login.url}>{auth.login.title}</Link>
                     </Button>
@@ -171,7 +172,10 @@ const Navbar = ({
 const renderMenuItem = (item: MenuItem) => {
   return (
     <NavigationMenuItem asChild key={item.title}>
-      <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground">
+      <NavigationMenuLink
+        asChild
+        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
+      >
         <Link href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
     </NavigationMenuItem>
