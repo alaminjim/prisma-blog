@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { SearchForm } from "@/components/search-form";
-import { VersionSwitcher } from "@/components/version-switcher";
+import { SearchForm } from "@/components/moduler/dashboardSidebar/search-form";
+import { VersionSwitcher } from "@/components/moduler/dashboardSidebar/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -45,7 +45,7 @@ export function AppSidebar({
 }: {
   user: { role: string } & React.ComponentProps<typeof Sidebar>;
 }) {
-  let routes = [];
+  let routes: typeof adminRoute | typeof userRoute = [];
   switch (user.role) {
     case "admin":
       routes = adminRoute;
