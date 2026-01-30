@@ -14,6 +14,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
+import { adminRoute } from "@/routes/admin";
+import { userRoute } from "@/routes/user";
 
 // This is sample data.
 const data = {
@@ -24,19 +27,38 @@ const data = {
 
       items: [
         {
-          title: "Blog",
-          url: "/dashboard/blog",
+          title: "User",
+          url: "/dashboard/user",
         },
         {
-          title: "Analytics",
-          url: "/dashboard/analytics",
+          title: "Admin",
+          url: "/dashboard/admin",
         },
       ],
     },
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  user,
+  ...props
+}: {
+  user: { role: string } & React.ComponentProps<typeof Sidebar>;
+}) {
+  let routes = [];
+  switch (user.role) {
+    case "admin":
+      routes = adminRoute;
+      break;
+    case "user":
+      routes = userRoute;
+      break;
+
+    default:
+      routes = [];
+      break;
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarContent>
@@ -45,12 +67,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                {routes.map((group) => (
+                  <SidebarGroup key={group.title}>
+                    <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+
+                    <SidebarGroupContent>
+                      <SidebarMenu>
+                        {group.items.map((item) => (
+                          <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton asChild>
+                              <Link href={item.url}>{item.title}</Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                      </SidebarMenu>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
